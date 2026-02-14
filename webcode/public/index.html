@@ -3,49 +3,51 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-    <title>Web Linux iOS Terminal (Prototype)</title>
+    <title>Web Linux iOS Terminal (iSH-style toolbar)</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
     <style>
       body, html { height:100%; margin:0; display:flex; flex-direction:column; background:#0b0f14; color:#fff; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
       #term { flex:1; min-height:120px; }
-      .toolbar { display:flex; gap:8px; padding:8px; background:#071722; align-items:center; flex-wrap:wrap; }
+      .toolbar { display:flex; gap:8px; padding:8px; background:#071722; align-items:center; }
       .toolbar button { padding:8px 10px; border-radius:8px; background:#0f1720; color:#fff; border:1px solid #23303a; font-weight:600; }
-      .toolbar button.modifier { min-width:56px; }
-      .toolbar button.active { background:linear-gradient(180deg,#1f6a9b,#164d74); box-shadow:0 2px 0 rgba(0,0,0,0.4) inset; }
-      .toolbar .label { color:#7ea7bf; font-size:13px; margin-right:8px; }
-      .quick-cmds { padding:6px; background:#051218; display:flex; gap:6px; flex-wrap:wrap; }
-      .note { font-size:12px; color:#9fb9c9; padding:6px 8px; }
-      .controls { display:flex; gap:6px; align-items:center; margin-left:auto; }
+      .modifier { min-width:60px; }
+      .active { background:linear-gradient(180deg,#1f6a9b,#164d74); box-shadow:0 2px 0 rgba(0,0,0,0.4) inset; }
+      .arrow-row { display:flex; gap:6px; align-items:center; }
       .small { padding:6px 8px; font-size:13px; border-radius:6px; }
+      #hidden-input { position: absolute; left:-9999px; top: -9999px; opacity:0; width:1px; height:1px; }
+      .note { font-size:12px; color:#9fb9c9; padding:6px 8px; }
     </style>
   </head>
   <body>
     <div class="toolbar" aria-label="special keys toolbar">
       <button id="btn-ctrl" class="modifier" data-mod="ctrl">Ctrl</button>
       <button id="btn-alt" class="modifier" data-mod="alt">Alt</button>
-      <button id="btn-meta" class="modifier" data-mod="meta">Meta</button>
 
-      <div style="width:1px;height:32px;background:#1b2a30;margin:0 8px;"></div>
+      <div style="width:1px;height:32px;background:#1b2a30;margin:0 6px;"></div>
 
-      <button id="btn-esc" class="small" data-send="\x1b">Esc</button>
-      <button id="btn-tab" class="small" data-send="\t">Tab</button>
-      <button id="btn-^C" class="small" data-send="\x03">^C</button>
-      <button id="btn-^X" class="small" data-send_ctrl="x">^X</button>
+      <button id="btn-esc" class="small" data-send="esc">Esc</button>
+      <button id="btn-tab" class="small" data-send="tab">Tab</button>
 
-      <div class="controls">
-        <button id="btn-paste" class="small">Paste</button>
-        <button id="btn-clear" class="small">Clear</button>
+      <div style="width:1px;height:32px;background:#1b2a30;margin:0 6px;"></div>
+
+      <div class="arrow-row">
+        <button id="btn-left" class="small" data-arrow="left">←</button>
+        <button id="btn-up" class="small" data-arrow="up">↑</button>
+        <button id="btn-down" class="small" data-arrow="down">↓</button>
+        <button id="btn-right" class="small" data-arrow="right">→</button>
       </div>
+
+      <div style="width:1px;height:32px;background:#1b2a30;margin:0 6px;"></div>
+
+      <button id="btn-keyboard" class="small">Keyboard</button>
+      <button id="btn-paste" class="small">Paste</button>
     </div>
 
     <div id="term" role="application" aria-label="terminal"></div>
 
-    <div class="quick-cmds">
-      <button class="cmd" data-cmd="ls -la">ls -la</button>
-      <button class="cmd" data-cmd="git status">git status</button>
-      <button class="cmd" data-cmd="uname -a">uname -a</button>
-      <button class="cmd" data-cmd="top -b -n1">top (one-shot)</button>
-    </div>
+    <input id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+
+    <div class="note">ใช้งาน: คลิก Ctrl/Alt ครั้งเดียว = single-use, ดับเบิลคลิก = lock (ค้าง). ใช้ปุ่ม Keyboard เพื่อเปิดแป้นพิมพ์บน iOS ถ้าจำเป็น.</div>
 
     <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
     <script src="app.js"></script>

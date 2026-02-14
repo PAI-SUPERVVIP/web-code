@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Web Linux iOS Terminal (Prototype)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+    <style>
+      body, html { height:100%; margin:0; display:flex; flex-direction:column; background:#0b0f14; color:#fff; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+      #term { flex:1; min-height:120px; }
+      .toolbar { display:flex; gap:8px; padding:8px; background:#071722; align-items:center; flex-wrap:wrap; }
+      .toolbar button { padding:8px 10px; border-radius:8px; background:#0f1720; color:#fff; border:1px solid #23303a; font-weight:600; }
+      .toolbar button.modifier { min-width:56px; }
+      .toolbar button.active { background:linear-gradient(180deg,#1f6a9b,#164d74); box-shadow:0 2px 0 rgba(0,0,0,0.4) inset; }
+      .toolbar .label { color:#7ea7bf; font-size:13px; margin-right:8px; }
+      .quick-cmds { padding:6px; background:#051218; display:flex; gap:6px; flex-wrap:wrap; }
+      .note { font-size:12px; color:#9fb9c9; padding:6px 8px; }
+      .controls { display:flex; gap:6px; align-items:center; margin-left:auto; }
+      .small { padding:6px 8px; font-size:13px; border-radius:6px; }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar" aria-label="special keys toolbar">
+      <div class="label">)</div>
+      <button id="btn-ctrl" class="modifier" data-mod="ctrl">Ctrl</button>
+      <button id="btn-alt" class="modifier" data-mod="alt">Alt</button>
+      <button id="btn-meta" class="modifier" data-mod="meta">Meta</button>
+
+      <div style="width:1px;height:32px;background:#1b2a30;margin:0 8px;"></div>
+
+      <button id="btn-esc" class="small" data-send="\x1b">Esc</button>
+      <button id="btn-tab" class="small" data-send="\t">Tab</button>
+      <button id="btn-^C" class="small" data-send="\x03">^C</button>
+      <button id="btn-^X" class="small" data-send_ctrl="x">^X</button>
+
+      <div class="controls">
+        <button id="btn-paste" class="small">Paste</button>
+        <button id="btn-clear" class="small">Clear</button>
+      </div>
+    </div>
+
+    <div id="term" role="application" aria-label="terminal"></div>
+
+    <div class="quick-cmds">
+      <button class="cmd" data-cmd="ls -la">ls -la</button>
+      <button class="cmd" data-cmd="git status">git status</button>
+      <button class="cmd" data-cmd="uname -a">uname -a</button>
+      <button class="cmd" data-cmd="top -b -n1">top (one-shot)</button>
+    </div>
+
+    <div class="note">Tip: To exit nano, click <strong>Ctrl</strong> (single click) then press <strong>x</strong>.
+    Double-click modifier to lock it for repeated use (e.g., for editor shortcuts).</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
